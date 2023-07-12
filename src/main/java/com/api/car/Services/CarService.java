@@ -55,22 +55,13 @@ public class CarService {
         }
     }
 
-//    public String deleteCar(Long idChassi) {
-//
-//        if(!carRepository.findById(idChassi).equals(NoSuchElementException.class)){
-//            carRepository.deleteById(idChassi);
-//            return idChassi.toString();
-//        } else {
-//            ResponseEntity.status(HttpStatus.NOT_FOUND);
-//            return "User not Found";
-//        }
-//
-////        try{
-////            carRepository.deleteById(idChassi);
-////            return "User deleted successfully";
-////        } catch (RuntimeException e) {
-////            ResponseEntity.status(HttpStatus.NOT_FOUND);
-////            return "User not Found";
-////        }
-//    }
+    public String deleteCar(Long idChassi) {
+        Optional<Car> optionalCar = carRepository.findById(idChassi);
+        if (optionalCar.isPresent()) {
+            carRepository.deleteById(idChassi);
+            return "Car deleted";
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
 }

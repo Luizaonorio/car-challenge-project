@@ -26,4 +26,14 @@ public class CarController {
     public ResponseEntity<String> createCar(@RequestBody @Valid CarDTO carDTO, BindingResult bindingResult) {
         return carService.createCar(carDTO, bindingResult, carService);
     }
+
+//    @PutMapping(value = "/put/{idChassi}")
+//    public CarDTO updateById(@PathVariable Long idChassi) {
+//        return carService.updateById(idChassi);
+//    }
+
+    @DeleteMapping(value = "/del/{idChassi}")
+    public String deleteCar(@PathVariable Long idChassi) {
+        return carService.deleteCar(idChassi);
+    }
 }
