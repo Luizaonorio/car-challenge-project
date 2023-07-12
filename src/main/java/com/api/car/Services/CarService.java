@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Optional;
 
@@ -19,9 +20,14 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
 
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public class UserNotFoundException extends RuntimeException{
+
+    }
+
     public Car findById(Long idChassi) {
         Optional<Car> optionalCar = carRepository.findById(idChassi);
-        return optionalCar.orElseThrow(() -> new RuntimeException("Object not found in database"));
+        return optionalCar.orElseThrow(UserNotFoundException::new);
     }
 
     private Car createCarModel(CarDTO carDTO) {
@@ -48,4 +54,23 @@ public class CarService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(bindingResult.getFieldError().getDefaultMessage());
         }
     }
+
+//    public String deleteCar(Long idChassi) {
+//
+//        if(!carRepository.findById(idChassi).equals(NoSuchElementException.class)){
+//            carRepository.deleteById(idChassi);
+//            return idChassi.toString();
+//        } else {
+//            ResponseEntity.status(HttpStatus.NOT_FOUND);
+//            return "User not Found";
+//        }
+//
+////        try{
+////            carRepository.deleteById(idChassi);
+////            return "User deleted successfully";
+////        } catch (RuntimeException e) {
+////            ResponseEntity.status(HttpStatus.NOT_FOUND);
+////            return "User not Found";
+////        }
+//    }
 }
