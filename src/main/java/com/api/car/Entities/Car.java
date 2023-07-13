@@ -1,5 +1,4 @@
 package com.api.car.Entities;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity

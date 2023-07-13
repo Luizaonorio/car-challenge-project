@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
 
-public class CarDTO {
+public class CarDTOResponse {
+
+    private Long idChassi;
 
     @Pattern(regexp = "^^(?:[A-Z][a-zÀ-ÿ]+(?:\\s[A-Z][a-zÀ-ÿ]+)*|\\b[A-Z][a-zÀ-ÿ]{1,2}\\b)(?:\\s[A-Z][a-zÀ-ÿ]+)*$", message = "Invalid name")
     @NotEmpty (message = "You forgot to fill in the name field")
@@ -23,21 +25,31 @@ public class CarDTO {
     private String fabricationYear;
 
 
-    public CarDTO() {
+    public CarDTOResponse() {
     }
 
-    public CarDTO(Long idChassi, String name, String brand, String color, String fabricationYear) {
+    public CarDTOResponse(Long idChassi, String name, String brand, String color, String fabricationYear) {
+        this.idChassi= idChassi;
         this.name = name;
         this.brand = brand;
         this.color = color;
         this.fabricationYear = fabricationYear;
     }
 
-    public CarDTO(Car car) {
+    public CarDTOResponse(Car car) {
+        this.idChassi = car.getIdChassi();
         this.name = car.getName();
         this.brand = car.getBrand();
         this.color = car.getColor();
         this.fabricationYear = car.getFabricationYear();
+    }
+
+    public Long getIdChassi() {
+        return idChassi;
+    }
+
+    public void setIdChassi(Long idChassi) {
+        this.idChassi = idChassi;
     }
 
     public String getName() {

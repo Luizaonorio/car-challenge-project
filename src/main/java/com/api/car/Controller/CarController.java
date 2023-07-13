@@ -1,6 +1,7 @@
 package com.api.car.Controller;
 
-import com.api.car.DTO.CarDTO;
+import com.api.car.DTO.CarDTORequest;
+import com.api.car.DTO.CarDTOResponse;
 import com.api.car.Services.CarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,12 @@ public class CarController {
     private CarService carService;
 
     @GetMapping(value = "/get/{idChassi}")
-    public CarDTO finById(@PathVariable Long idChassi) {
+    public CarDTOResponse finById(@PathVariable Long idChassi) {
         return carService.findById(idChassi);
     }
 
     @PostMapping(value = "/post")
-    public ResponseEntity<String> createCar(@Valid @RequestBody CarDTO carDTO, BindingResult bindingResult) {
-        return carService.createCar(carDTO, bindingResult);
+    public ResponseEntity<CarDTOResponse> createCar(@Valid @RequestBody CarDTORequest carDTORequest) {
+        return carService.createCar(carDTORequest);
     }
 }

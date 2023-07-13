@@ -1,16 +1,16 @@
 package com.api.car.Services;
 
-import com.api.car.DTO.CarDTO;
+import com.api.car.DTO.CarDTORequest;
+import com.api.car.DTO.CarDTOResponse;
 import com.api.car.Entities.Car;
 import com.api.car.Repository.CarRepository;
+import com.api.car.Services.Exceptions.CarNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Optional;
 
@@ -20,51 +20,36 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public class UserNotFoundException extends RuntimeException{
-
+    public CarDTOResponse createCarDTOModel(Car car) {
+        CarDTOResponse carDTOResponse = new CarDTOResponse();
+        carDTOResponse.setIdChassi(car.getIdChassi());
+        carDTOResponse.setBrand(car.getBrand());
+        carDTOResponse.setColor(car.getColor());
+        carDTOResponse.setName(car.getName());
+        carDTOResponse.setFabricationYear(car.getFabricationYear());
+        return carDTOResponse;
     }
 
-    public CarDTO createCarDTOModel(Car car) {
-        CarDTO carDTO = new CarDTO();
-        carDTO.setBrand(car.getBrand());
-        carDTO.setColor(car.getColor());
-        carDTO.setName(car.getName());
-        carDTO.setFabricationYear(car.getFabricationYear());
-        return carDTO;
-    }
-
-    public CarDTO findById(Long idChassi) {
+    public CarDTOResponse findById(Long idChassi) {
         Optional<Car> carOptional = carRepository.findById(idChassi);
-        CarDTO carDTO = carOptional.map(this::createCarDTOModel).orElseThrow(UserNotFoundException::new);
-        return carDTO;
+        CarDTOResponse carDTOResponse = carOptional.map(this::createCarDTOModel).orElseThrow(() -> new CarNotFoundException(idChassi));
+        return carDTOResponse;
     }
 
-    private Car createCarModel(CarDTO carDTO) {
+    private Car createCarModel(CarDTORequest carDTORequest) {
         Car car = new Car();
-        car.setBrand(carDTO.getBrand());
-        car.setColor(carDTO.getColor());
-        car.setName(carDTO.getName());
-        car.setFabricationYear(carDTO.getFabricationYear());
+        car.getIdChassi();
+        car.setBrand(carDTORequest.getBrand());
+        car.setColor(carDTORequest.getColor());
+        car.setName(carDTORequest.getName());
+        car.setFabricationYear(carDTORequest.getFabricationYear());
 
         return car;
     }
 
     @Transactional
-    public ResponseEntity<String> createCar(CarDTO carDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldError().getDefaultMessage());
-        }
-        else {
-            carRepository.save(createCarModel(carDTO));
-            return ResponseEntity.status(HttpStatus.CREATED).body(
-                    " ---------------- \n"
-                            + " Car was created! \n"
-                            + " ---------------- \n \n"
-                            + " Name: " + carDTO.getName()
-                            + "\n Brand: " + carDTO.getBrand()
-                            + "\n Color: " + carDTO.getColor()
-                            + "\n Fabrication Year: " + carDTO.getFabricationYear());
-        }
+    public ResponseEntity<CarDTOResponse> createCar(CarDTORequest carDTORequest) {
+            Car car = carRepository.save(createCarModel(carDTORequest));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new CarDTOResponse(car));
     }
 }
