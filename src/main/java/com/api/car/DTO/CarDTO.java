@@ -4,22 +4,24 @@ import com.api.car.Entities.Car;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
+
 public class CarDTO {
 
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Invalid name")
+    @Pattern(regexp = "^^(?:[A-Z][a-zÀ-ÿ]+(?:\\s[A-Z][a-zÀ-ÿ]+)*|\\b[A-Z][a-zÀ-ÿ]{1,2}\\b)(?:\\s[A-Z][a-zÀ-ÿ]+)*$", message = "Invalid name")
     @NotEmpty (message = "You forgot to fill in the name field")
     private String name;
 
-    @Pattern(regexp = "^(Ford|Chevrolet|BMW|Volvo)$", message = "Incorrect brand name or outside partners")
+    @Pattern(regexp = "^(Ford|Chevrolet|BMW|Volvo)$", message = "Incorrect brand name or outside partners.")
     @NotEmpty (message = "You forgot to fill in the brand field")
     private String brand;
-    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "Invalid color")
+    @Pattern(regexp = "^[A-Za-z]+(?: [A-Za-z]+)*$", message = "Invalid color. Pattern example: Blue")
     @NotEmpty (message = "You forgot to fill in the color field")
     private String color;
 
-    @Pattern(regexp = "^\\d{4}(\\/\\d{4})?$", message = "Invalid date")
+    @Pattern(regexp = "^\\d{4}(\\/\\d{4})?$", message = "Invalid date. Pattern example: 2000 or 2000/2001")
     @NotEmpty (message = "You forgot to fill in the fabrication year field")
     private String fabricationYear;
+
 
     public CarDTO() {
     }

@@ -25,9 +25,19 @@ public class CarService {
 
     }
 
-    public Car findById(Long idChassi) {
-        Optional<Car> optionalCar = carRepository.findById(idChassi);
-        return optionalCar.orElseThrow(UserNotFoundException::new);
+    public CarDTO createCarDTOModel(Car car) {
+        CarDTO carDTO = new CarDTO();
+        carDTO.setBrand(car.getBrand());
+        carDTO.setColor(car.getColor());
+        carDTO.setName(car.getName());
+        carDTO.setFabricationYear(car.getFabricationYear());
+        return carDTO;
+    }
+
+    public CarDTO findById(Long idChassi) {
+        Optional<Car> carOptional = carRepository.findById(idChassi);
+        CarDTO carDTO = carOptional.map(this::createCarDTOModel).orElseThrow(UserNotFoundException::new);
+        return carDTO;
     }
 
     private Car createCarModel(CarDTO carDTO) {
@@ -41,27 +51,20 @@ public class CarService {
     }
 
     @Transactional
-    public String create(CarDTO carDTO) {
-        carRepository.save(createCarModel(carDTO));
-        return "User created successfully";
-    }
-
-    public ResponseEntity<String> createCar(CarDTO carDTO, BindingResult bindingResult, CarService carService) {
-        if (!bindingResult.hasErrors()){
-            return ResponseEntity.ok(carService.create(carDTO));
+    public ResponseEntity<String> createCar(CarDTO carDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldError().getDefaultMessage());
         }
         else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(bindingResult.getFieldError().getDefaultMessage());
-        }
-    }
-
-    public String deleteCar(Long idChassi) {
-        Optional<Car> optionalCar = carRepository.findById(idChassi);
-        if (optionalCar.isPresent()) {
-            carRepository.deleteById(idChassi);
-            return "Car deleted";
-        } else {
-            throw new UserNotFoundException();
+            carRepository.save(createCarModel(carDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    " ---------------- \n"
+                            + " Car was created! \n"
+                            + " ---------------- \n \n"
+                            + " Name: " + carDTO.getName()
+                            + "\n Brand: " + carDTO.getBrand()
+                            + "\n Color: " + carDTO.getColor()
+                            + "\n Fabrication Year: " + carDTO.getFabricationYear());
         }
     }
 }
