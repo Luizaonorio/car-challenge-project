@@ -35,10 +35,16 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(CarNotFoundException .class)
-    public ResponseEntity<Object> NotFoundException(CarNotFoundException  e){
+    @ExceptionHandler(CarNotFoundException.class)
+    public ResponseEntity<Object> NotFoundException(CarNotFoundException e){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalBrandException.class)
+    public ResponseEntity<Object> NotFoundException(IllegalBrandException e){
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 }
 

@@ -11,8 +11,6 @@ public class CarDTORequest {
     @NotEmpty (message = "You forgot to fill in the name field")
     private String name;
 
-    @Pattern(regexp = "^(Ford|Chevrolet|BMW|Volvo)$", message = "Incorrect brand name or outside partners.")
-    @NotEmpty (message = "You forgot to fill in the brand field")
     private String brand;
     @Pattern(regexp = "^[A-Za-z]+(?: [A-Za-z]+)*$", message = "Invalid color. Pattern example: Blue")
     @NotEmpty (message = "You forgot to fill in the color field")

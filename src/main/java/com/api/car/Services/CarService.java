@@ -5,6 +5,7 @@ import com.api.car.DTO.CarDTOResponse;
 import com.api.car.Entities.Car;
 import com.api.car.Repository.CarRepository;
 import com.api.car.Services.Exceptions.CarNotFoundException;
+import com.api.car.Services.Exceptions.IllegalBrandException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -37,6 +39,7 @@ public class CarService {
     }
 
     private Car createCarModel(CarDTORequest carDTORequest) {
+        validateBrand(carDTORequest.getBrand());
         Car car = new Car();
         car.getIdChassi();
         car.setBrand(carDTORequest.getBrand());
@@ -51,5 +54,12 @@ public class CarService {
     public ResponseEntity<CarDTOResponse> createCar(CarDTORequest carDTORequest) {
             Car car = carRepository.save(createCarModel(carDTORequest));
             return ResponseEntity.status(HttpStatus.CREATED).body(new CarDTOResponse(car));
+    }
+
+    private void validateBrand(String brand) {
+        final String[] disponibleBrand = {"BMW", "Volvo", "Chevrolet", "Ford"};
+        if (!Arrays.asList(disponibleBrand).contains(brand)) {
+            throw new IllegalBrandException(brand);
+        }
     }
 }
