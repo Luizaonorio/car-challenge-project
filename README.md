@@ -25,9 +25,15 @@ GET: /cars/get/{idChassi}
 }
 
 ● Rule 1 - The “brand” field should accept only thebrands(Ford,Chevrolet,BMW,Volvo) and in case of sending another field that is not these 4 brands, send an exception and not let the request execute successfully.
-● Rule 2 - The above payload must be registered in thedatabase.
+
+● Rule 2 - The above payload must be registered in thedatabase. 
+
 ● Rule 3 - When a GET is called, the IdChassi must be passed and the corresponding car saved by the POST in the database must be returned.
+
 ● Rule 4 - Nulls must not be saved in the database or returned in the OUTPUT or ENTRY DTOs, this validation must occur and in case of null, throw an exception as described above.
+
 ● Rule 5 - Projects that do not have the correct database configuration will have a discounted grade.
+
 ● Rule 6 - The fields must be in English like the payload above.
+
 ● Rule 7 - The controller, service and repository needs to use the semantic components annotations.
