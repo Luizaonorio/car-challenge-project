@@ -7,12 +7,12 @@ import jakarta.validation.constraints.Pattern;
 
 public class CarDTORequest {
 
-    @Pattern(regexp = "^^(?:[A-Z][a-zÀ-ÿ]+(?:\\s[A-Z][a-zÀ-ÿ]+)*|\\b[A-Z][a-zÀ-ÿ]{1,2}\\b)(?:\\s[A-Z][a-zÀ-ÿ]+)*$", message = "Invalid name")
+    @Pattern(regexp = "^(?!.*\\s{2})[A-ZÁÉÍÓÚÂÊÎÔÛÀÈÌÒÙÇÑ][a-zA-ZÀ-ÿ\\s]*[a-zA-ZÀ-ÿ]$", message = "Invalid name. Pattern example: New fiesta")
     @NotEmpty (message = "You forgot to fill in the name field")
     private String name;
 
     private String brand;
-    @Pattern(regexp = "^[A-Za-z]+(?: [A-Za-z]+)*$", message = "Invalid color. Pattern example: Blue")
+    @Pattern(regexp = "^(?!.*\\s{2})[A-ZÁÉÍÓÚÂÊÎÔÛÀÈÌÒÙÇÑ][a-zA-ZÀ-ÿ\\s]*[a-zA-ZÀ-ÿ]$", message = "Invalid color. Pattern example: Blue")
     @NotEmpty (message = "You forgot to fill in the color field")
     private String color;
 
